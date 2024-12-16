@@ -20,6 +20,9 @@ def allowed_file(filename):
 def add_user():
     # 요청에서 'name' 값이 있는지 확인
     name = request.form.get('name')
+    print("Request.form:", request.form)  # name 필드 로그
+    print("Request.files:", request.files)  # file 필드 로그
+
     if not name:
         return jsonify({"error": "name 필드가 없습니다"}), 400
 

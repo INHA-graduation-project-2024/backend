@@ -2,11 +2,15 @@ import os
 
 from flask import Flask
 from .controller import register_blueprints
+from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
 
     register_blueprints(app)
+
+    # CORS 설정: localhost:5173에서만 요청 허용 + 자격 증명 지원 (임시)
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
     # 이미지가 저장될 폴더를 설정
     # app.config['UPLOAD_FOLDER'] = './static/face'
