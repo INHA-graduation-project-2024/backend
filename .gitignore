@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# 얼굴 이미지
+static/*
+
 # Virtual environment
 venv/
 ENV/
