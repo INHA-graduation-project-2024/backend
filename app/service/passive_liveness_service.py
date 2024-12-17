@@ -14,8 +14,8 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 모델 경로를 절대 경로로 설정
 # model_path = os.path.join(base_dir, '../ML_model/DeePixBiS.pth')
-# model_path = os.path.join(base_dir, '../ML_model/MobilNet_epoch200_lr0.0001_noscheduler.pth')
-model_path = os.path.join(base_dir, '../ML_model/MobilNetFianl.pth')
+model_path = os.path.join(base_dir, '../ML_model/MobilNet_epoch200_lr0.0001_noscheduler.pth')
+# model_path = os.path.join(base_dir, '../ML_model/MobilNetFianl.pth')
 # model_path = os.path.join(base_dir, '../ML_model/DeePixBiSFinal.pth')
 haar_cascade_path = os.path.join(base_dir, '../ML_model/haarface.xml')
 
@@ -31,6 +31,7 @@ model.eval()
 # 전처리..
 tfms = transforms.Compose([
     transforms.ToPILImage(),
+    # transforms.Resize((640, 484)),
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
