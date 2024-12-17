@@ -8,20 +8,20 @@ from ..ML_model.Model import DeePixBiS, MobileNet
 base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # # 모델 로드
-# model = DeePixBiS()
+model = DeePixBiS()
 # model.load_state_dict(torch.load('../ML_model/DeePixBiS.pth'))
 # model.eval()
 
 # 모델 경로를 절대 경로로 설정
-# model_path = os.path.join(base_dir, '../ML_model/DeePixBiS.pth')
+model_path = os.path.join(base_dir, '../ML_model/DeePixBiS.pth')
 # model_path = os.path.join(base_dir, '../ML_model/MobilNet_epoch200_lr0.0001_noscheduler.pth')
-model_path = os.path.join(base_dir, '../ML_model/MobilNetFianl.pth')
+# model_path = os.path.join(base_dir, '../ML_model/MobilNetFianl.pth')
 # model_path = os.path.join(base_dir, '../ML_model/DeePixBiSFinal.pth')
 haar_cascade_path = os.path.join(base_dir, '../ML_model/haarface.xml')
 
 # 모델 로드
 # model = DeePixBiS()
-model = MobileNet()
+# model = MobileNet()
 # model.load_state_dict(torch.load(model_path))
 # 모델 로드 시 map_location 옵션 추가
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -92,7 +92,7 @@ class PassiveLivenessService:
             #     'prediction': result_text,
             #     'confidence': res
             # })
-            if res < 0.7:
+            if res < 0.54:
                 # cv.putText(img, 'Real', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
                 results.append({
                     'face_position': {'x': int(x), 'y': int(y), 'width': int(w), 'height': int(h)},
