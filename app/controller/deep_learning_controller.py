@@ -1,3 +1,4 @@
+import cv2
 from flask import Blueprint, request, jsonify, current_app
 import os
 from werkzeug.utils import secure_filename
@@ -100,6 +101,17 @@ def passive():
         # TODO: 저장 후 제대로 저장이 안 된 경우를 고려해야 할까
 
         try:
+            # 이미지 읽고 사이즈 조정
+            image = cv2.imread(file_path)
+            if image is None:
+                return jsonify({"error": "이미지 파일을 읽을 수 없습니다."}), 400
+
+            resized_image = cv2.resize(image, (640, 484))  # 이미지 크기 224x224로 조정
+
+            # 다시 저장 (덮어쓰기)
+            cv2.imwrite(file_path, resized_image)
+            print("이미지 리사이징 완료:", file_path)
+
             faces, img = passive_liveness_service.face_detection(file_path)
             passive_result = passive_liveness_service.preprocessing(faces, img)
             return jsonify({"result": passive_result})

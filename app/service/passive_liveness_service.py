@@ -14,7 +14,9 @@ base_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 모델 경로를 절대 경로로 설정
 # model_path = os.path.join(base_dir, '../ML_model/DeePixBiS.pth')
-model_path = os.path.join(base_dir, '../ML_model/MobilNet_epoch200_lr0.0001_noscheduler.pth')
+# model_path = os.path.join(base_dir, '../ML_model/MobilNet_epoch200_lr0.0001_noscheduler.pth')
+model_path = os.path.join(base_dir, '../ML_model/MobilNetFianl.pth')
+# model_path = os.path.join(base_dir, '../ML_model/DeePixBiSFinal.pth')
 haar_cascade_path = os.path.join(base_dir, '../ML_model/haarface.xml')
 
 # 모델 로드
@@ -54,7 +56,7 @@ class PassiveLivenessService:
             raise ValueError(f"이미지를 읽어오지 못했습니다: {img_path}")
 
         try:
-            grey = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+            grey = cv.cvtColor(img, cv.COLOR_BGR2RGB)
             faces = faceClassifier.detectMultiScale(grey, scaleFactor=1.1, minNeighbors=4)
             return faces, img
         except Exception as e:
@@ -77,15 +79,33 @@ class PassiveLivenessService:
 
                 mask = model.forward(faceRegion)
                 print(mask)
+                print("model detection")
+
+                if isinstance(mask, tuple):
+                    mask = mask[0]  # 첫 번째 값을 사용 (필요한 값에 따라 인덱스를 조정)
                 res = torch.mean(mask).item()
 
             # 스푸핑 판별 결과 저장
-            result_text = 'Real' if res >= 0.5 else 'Fake'
-            results.append({
-                'face_position': {'x': int(x), 'y': int(y), 'width': int(w), 'height': int(h)},
-                'prediction': result_text,
-                'confidence': res
-            })
+            # result_text = 'Real' if res >= 0.5 else 'Fake'
+            # results.append({
+            #     'face_position': {'x': int(x), 'y': int(y), 'width': int(w), 'height': int(h)},
+            #     'prediction': result_text,
+            #     'confidence': res
+            # })
+            if res < 0.7:
+                # cv.putText(img, 'Real', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+                results.append({
+                    'face_position': {'x': int(x), 'y': int(y), 'width': int(w), 'height': int(h)},
+                    'prediction': "Fake",
+                    'confidence': res
+                })
+            else:
+                # cv.putText(img, 'Fake', (x, y + h + 30), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+                results.append({
+                    'face_position': {'x': int(x), 'y': int(y), 'width': int(w), 'height': int(h)},
+                    'prediction': "Real",
+                    'confidence': res
+                })
 
         # 스푸핑 판별 결과 반환
         return results
