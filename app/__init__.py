@@ -19,6 +19,7 @@ def create_app():
     # 이미지가 저장될 폴더를 절대 경로로 설정
     app.config['UPLOAD_FOLDER'] = os.path.abspath('./static/face')
     app.config['UPLOAD_PASSIVE_FOLDER'] = os.path.abspath('./static/passive')
+    app.config['UPLOAD_ACTIVE_FOLDER'] = os.path.abspath('./static/active')
 
     # 폴더가 없는 경우 생성
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
